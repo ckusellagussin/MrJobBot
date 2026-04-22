@@ -11,9 +11,11 @@ from jobs import fetch_jobs
 load_dotenv()
 
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "")
-TARGET_ROLE = os.getenv("TARGET_ROLE", "SOC Analyst Level 1").lower()
+TARGET_ROLES = [x.strip().lower() for x in os.getenv("TARGET_ROLES", "SOC Analyst Level 1").split(",") if x.strip()]
 MIN_SALARY = int(os.getenv("MIN_SALARY", "0"))
 LONDON_AVG_SALARY = int(os.getenv("LONDON_AVG_SALARY", "0"))
+CV_TEXT = os.getenv("CV_TEXT", "")
+CV_KEYWORDS = [x.strip().lower() for x in os.getenv("CV_KEYWORDS", "").split(",") if x.strip()]
 STATE_FILE = Path("state.json")
 
 
@@ -49,6 +51,20 @@ def salary_value(job):
     return 0
 
 
+def cv_match(job):
+    if not CV_KEYWORDS and not CV_TEXT:
+        return True
+    haystack = " ".join([
+        normalize(job.get("title")),
+        normalize(job.get("description")),
+        normalize(job.get("skills")),
+        normalize(job.get("company")),
+    ])
+    if CV_KEYWORDS:
+        return any(k in haystack for k in CV_KEYWORDS)
+    return any(token in haystack for token in normalize(CV_TEXT).split() if len(token) > 2)
+
+
 def is_valid_role(job):
     title = normalize(job.get("title"))
     company = normalize(job.get("company"))
@@ -56,7 +72,7 @@ def is_valid_role(job):
     source = normalize(job.get("source"))
     salary = salary_value(job)
 
-    if TARGET_ROLE not in title:
+    if not any(role in title for role in TARGET_ROLES):
         return False
     if "data collection" in title:
         return False
@@ -65,6 +81,8 @@ def is_valid_role(job):
     if company == "" or location == "":
         return False
     if source not in {"linkedin", "workday", "company", "jobboard"}:
+        return False
+    if not cv_match(job):
         return False
     return True
 
@@ -113,7 +131,7 @@ def main():
         seen.add(job_id)
 
     if not matches:
-        send_discord_message("Prototype 3: no new matching jobs found.")
+        send_discord_message(f"MrJobBot: no new matching jobs found for {os.getenv('TARGET_ROLES', 'SOC Analyst Level 1')}.")
     else:
         for job in matches:
             send_discord_message(format_message(job))

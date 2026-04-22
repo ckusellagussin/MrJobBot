@@ -10,6 +10,8 @@ def fetch_jobs():
             "apply_url": "https://example.com/jobs/soc-analyst-1/apply",
             "source": "company",
             "legitimacy_check": "Direct company career page",
+            "description": "Security monitoring, alert triage, incident response",
+            "skills": "SIEM, SOC, incident handling",
         },
         {
             "id": "example-2",
@@ -21,5 +23,7 @@ def fetch_jobs():
             "apply_url": "https://example.com/jobs/data-collection/apply",
             "source": "jobboard",
             "legitimacy_check": "Excluded by title filter",
+            "description": "Not a fit",
+            "skills": "data collection",
         },
     ]

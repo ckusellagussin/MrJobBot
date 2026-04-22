@@ -1,14 +1,16 @@
-# Prototype 3
+# MrJobBot
 
 Discord job-alert bot for SOC Analyst Level 1 roles.
 
 ## Setup
 
 1. Add your Discord webhook to GitHub Secrets as `DISCORD_WEBHOOK_URL`.
-2. Add optional repo variables:
-   - `TARGET_ROLE`
+2. Add repository variables:
+   - `TARGET_ROLES`
    - `MIN_SALARY`
    - `LONDON_AVG_SALARY`
+   - `CV_KEYWORDS`
+   - `CV_TEXT` (optional)
 3. Push this repo.
 4. GitHub Actions will run every 15 minutes.
 
