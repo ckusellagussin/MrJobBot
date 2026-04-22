@@ -1,6 +1,30 @@
-from pathlib import Path
-p = Path('output/mrjobbot_repo/.github/workflows/run.yml')
-text = p.read_text(encoding='utf-8')
-text = text.replace('      - name: Setup Python\n        uses: actions/setup-python@v5\n', '      - name: Setup Python\n        uses: actions/setup-python@v6\n')
-p.write_text(text, encoding='utf-8')
-print('updated workflow')
+name: MrJobBot
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run bot
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TARGET_ROLES: ${{ vars.TARGET_ROLES }}
+          MIN_SALARY: ${{ vars.MIN_SALARY }}
+          LONDON_AVG_SALARY: ${{ vars.LONDON_AVG_SALARY }}
+        run: python src/main.py
