@@ -27,4 +27,6 @@ jobs:
           TARGET_ROLES: ${{ vars.TARGET_ROLES }}
           MIN_SALARY: ${{ vars.MIN_SALARY }}
           LONDON_AVG_SALARY: ${{ vars.LONDON_AVG_SALARY }}
+          CV_KEYWORDS: ${{ vars.CV_KEYWORDS }}
+          CV_TEXT: ${{ vars.CV_TEXT }}
         run: python src/main.py

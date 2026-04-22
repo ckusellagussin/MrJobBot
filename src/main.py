@@ -14,17 +14,19 @@ WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "")
 TARGET_ROLES = [x.strip().lower() for x in os.getenv("TARGET_ROLES", "SOC Analyst Level 1").split(",") if x.strip()]
 MIN_SALARY = int(os.getenv("MIN_SALARY", "0"))
 LONDON_AVG_SALARY = int(os.getenv("LONDON_AVG_SALARY", "0"))
+CV_TEXT = os.getenv("CV_TEXT", "")
+CV_KEYWORDS = [x.strip().lower() for x in os.getenv("CV_KEYWORDS", "").split(",") if x.strip()]
 STATE_FILE = Path("state.json")
 
 
 def load_state():
     if STATE_FILE.exists():
-        return json.loads(STATE_FILE.read_text(encoding='utf-8'))
+        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
     return {"seen": []}
 
 
 def save_state(state):
-    STATE_FILE.write_text(json.dumps(state, indent=2), encoding='utf-8')
+    STATE_FILE.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
 def send_discord_message(content):
@@ -129,7 +131,7 @@ def main():
         seen.add(job_id)
 
     if not matches:
-        send_discord_message(f"MrJobBot: no new matching jobs found for {os.getenv('TARGET_ROLES', 'SOC Analyst Level 1')}.")
+        send_discord_message(f"MrJobBot: no new matching jobs found for {os.getenv('TARGET_ROLES', 'SOC Analyst Level 1').strip()}.")
     else:
         for job in matches:
             send_discord_message(format_message(job))
