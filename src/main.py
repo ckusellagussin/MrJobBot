@@ -14,8 +14,6 @@ WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "")
 TARGET_ROLES = [x.strip().lower() for x in os.getenv("TARGET_ROLES", "SOC Analyst Level 1").split(",") if x.strip()]
 MIN_SALARY = int(os.getenv("MIN_SALARY", "0"))
 LONDON_AVG_SALARY = int(os.getenv("LONDON_AVG_SALARY", "0"))
-CV_TEXT = os.getenv("CV_TEXT", "")
-CV_KEYWORDS = [x.strip().lower() for x in os.getenv("CV_KEYWORDS", "").split(",") if x.strip()]
 STATE_FILE = Path("state.json")
 
 

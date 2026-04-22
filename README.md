@@ -9,8 +9,6 @@ Discord job-alert bot for SOC Analyst Level 1 roles.
    - `TARGET_ROLES`
    - `MIN_SALARY`
    - `LONDON_AVG_SALARY`
-   - `CV_KEYWORDS`
-   - `CV_TEXT` (optional)
 3. Push this repo.
 4. GitHub Actions will run every 15 minutes.
 
