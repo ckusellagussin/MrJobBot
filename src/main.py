@@ -95,20 +95,13 @@ def format_message(job):
         extras.append(f"Legitimacy: {job['legitimacy_check']}")
     if LONDON_AVG_SALARY:
         extras.append(f"London avg benchmark: {LONDON_AVG_SALARY}")
-    extra_line = "
-" + "
-".join(extras) if extras else ""
+    extra_line = "\n" + "\n".join(extras) if extras else ""
     return (
-        f"**{job['title']}**
-"
-        f"{job['company']} — {job['location']}
-"
-        f"Salary: {salary}
-"
-        f"Source: {job.get('source', 'unknown')}
-"
-        f"{job.get('url')}
-"
+        f"**{job['title']}**\n"
+        f"{job['company']} — {job['location']}\n"
+        f"Salary: {salary}\n"
+        f"Source: {job.get('source', 'unknown')}\n"
+        f"{job.get('url')}\n"
         f"Apply: {apply_url}"
         f"{extra_line}"
     )
