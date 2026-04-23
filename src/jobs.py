@@ -6,8 +6,8 @@ import time
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional
 from urllib.parse import quote
-from sources.linkedin import fetch_linkedin_jobs
-from sources.workday import fetch_workday_jobs
+from Sources.linkedin import fetch_linkedin_jobs
+from Sources.workday import fetch_workday_jobs
 
 import requests
 from bs4 import BeautifulSoup
