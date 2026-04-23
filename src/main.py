@@ -6,8 +6,7 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-from sources.linkedin import fetch_jobs as fetch_linkedin
-from sources.workday import fetch_jobs as fetch_workday
+from jobs import fetch_jobs
 
 load_dotenv()
 
@@ -89,13 +88,20 @@ def format_message(job):
         extras.append(f"Legitimacy: {job['legitimacy_check']}")
     if LONDON_AVG_SALARY:
         extras.append(f"London avg benchmark: £{LONDON_AVG_SALARY:,}")
-    extra_line = "\n" + "\n".join(extras) if extras else ""
+    extra_line = "
+" + "
+".join(extras) if extras else ""
     return (
-        f"**{job['title']}**\n"
-        f"{job['company']} — {job['location']}\n"
-        f"Salary: {salary}\n"
-        f"Source: {job.get('source', 'unknown')}\n"
-        f"{job.get('url')}\n"
+        f"**{job['title']}**
+"
+        f"{job['company']} — {job['location']}
+"
+        f"Salary: {salary}
+"
+        f"Source: {job.get('source', 'unknown')}
+"
+        f"{job.get('url')}
+"
         f"Apply: {apply_url}"
         f"{extra_line}"
     )
@@ -104,12 +110,11 @@ def main():
     state = load_state()
     seen = set(state.get("seen", []))
 
-    all_jobs = []
-    for fetcher in [fetch_linkedin, fetch_workday]:
-        try:
-            all_jobs.extend(fetcher())
-        except Exception as e:
-            print(f"[WARN] Source failed: {e}")
+    try:
+        all_jobs = fetch_jobs()
+    except Exception as e:
+        send_discord_message(f"MrJobBot error: {e}")
+        return
 
     matches = []
     for job in all_jobs:
